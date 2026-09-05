@@ -94,6 +94,19 @@ jobs:
 
     steps:
 
+      - name: Test continue-on-error
+        id: error-test
+        continue-on-error: true
+        run: |
+          echo "This step will fail"
+          exit 1
+
+      - name: Check step outcome
+        run: echo "Outcome = ${{ steps.error-test.outcome }}"
+
+      - name: Check step conclusion
+        run: echo "Conclusion = ${{ steps.error-test.conclusion }}"
+
       - name: Checkout code
         uses: actions/checkout@v5
 

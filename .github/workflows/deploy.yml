@@ -13,7 +13,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+  env:
+      APP_NAME: "EC2 Deployment"
     steps:
       - name: Test environment variable
         run: echo "APP_NAME is $APP_NAME"

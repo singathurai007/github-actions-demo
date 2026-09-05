@@ -53,6 +53,7 @@ jobs:
         run: npx eslint app.js
 
       - name: Run tests
+        if: success()
         run: npm test
 
       - name: Copy website to EC2

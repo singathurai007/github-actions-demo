@@ -66,9 +66,14 @@ jobs:
           name: build-result-node-${{ matrix.node-version }}-${{ matrix.os }}
           path: build/
 
+  reusable-build:
+    uses: ./.github/workflows/reusable-build.yml
+
 
   deploy:
-    needs: build
+    needs:
+      -  build
+      -  reusable-build
     runs-on: ubuntu-latest
 
     env:

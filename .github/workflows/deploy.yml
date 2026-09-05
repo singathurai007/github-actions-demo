@@ -23,8 +23,10 @@ jobs:
       - name: Test environment variable
         env:
           APP_NAME: "Step Deployment"
-        run: echo "APP_NAME is $APP_NAME"
-     
+        run: |
+          echo "Shell: $APP_NAME"
+          echo "GitHub: ${{ env.APP_NAME }}" 
+      
       - name: Checkout code
         uses: actions/checkout@v5
 

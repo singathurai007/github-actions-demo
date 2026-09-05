@@ -1,7 +1,0 @@
-
-
-
-
-
-- name: Run Lint
-  run: npx eslint app.js

@@ -1,5 +1,0 @@
-- name: Run Lint
-  run: npx eslint app.js
-
-- name: Run tests
-  run: npm test

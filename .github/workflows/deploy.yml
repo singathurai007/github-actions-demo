@@ -58,8 +58,23 @@ jobs:
 
       - name: Always run
         if: always()
-        run: echo "This step always runs!"               
+        run: echo "This step always runs!"
 
+      - name: Check main branch
+        if: contains(github.ref, 'main')
+        run: echo "This is the main branch"
+
+      - name: Check branch format
+        if: startsWith(github.ref, 'refs/heads/')
+        run: echo "This is a branch"
+
+      - name: Check main branch ending
+        if: endsWith(github.ref, 'main')
+        run: echo "Branch name ends with main"
+
+      - name: Run if cancelled
+        if: cancelled()
+        run: echo "Workflow was cancelled!"
 
       - name: Copy website to EC2
         uses: appleboy/scp-action@v1

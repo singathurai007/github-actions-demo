@@ -66,21 +66,27 @@ jobs:
           name: build-result-node-${{ matrix.node-version }}-${{ matrix.os }}
           path: build/
 
+
   reusable-build:
     uses: ./.github/workflows/reusable-build.yml
     with:
       node-version: "20"
 
+
   deploy:
     needs:
-      -  build
-      -  reusable-build
+      - build
+      - reusable-build
+
     runs-on: ubuntu-latest
 
     env:
       APP_NAME: "EC2 Deployment"
 
     steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v5
 
       - name: Download build artifacts
         uses: actions/download-artifact@v8
@@ -105,23 +111,13 @@ jobs:
       - name: Show matrix build completed
         run: echo "All matrix build jobs completed successfully!"
 
-      - name: Checkout code
-        uses: actions/checkout@v5
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Run Node Test Composite Action
+        uses: ./.github/actions/node-test
         with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: npm install
+          node-version: "20"
 
       - name: Run Lint
         run: npx eslint app.js
-
-      - name: Run tests
-        if: success()
-        run: npm test
 
       - name: Always run
         if: always()

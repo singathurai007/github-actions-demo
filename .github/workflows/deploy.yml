@@ -68,7 +68,8 @@ jobs:
 
   reusable-build:
     uses: ./.github/workflows/reusable-build.yml
-
+    with:
+      node-version: "20"
 
   deploy:
     needs:

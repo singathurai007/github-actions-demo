@@ -66,6 +66,13 @@ jobs:
           name: build-result-node-${{ matrix.node-version }}-${{ matrix.os }}
           path: build/
 
+       - name: Download build artifact
+         uses: actions/download-artifact@v8
+         with:
+           pattern: build-result-*
+           path: downloaded-artifacts
+           merge-multiple: true
+
 
   deploy:
     needs: build

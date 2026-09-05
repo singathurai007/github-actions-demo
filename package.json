@@ -1,23 +1,15 @@
 {
   "name": "github-actions-demo",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "GitHub Actions CI/CD Demo",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/singathurai007/github-actions-demo.git"
+    "test": "node app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/singathurai007/github-actions-demo/issues"
-  },
-  "homepage": "https://github.com/singathurai007/github-actions-demo#readme",
   "devDependencies": {
-    "eslint": "^10.10.0"
+    "eslint": "^9.35.0"
   }
 }

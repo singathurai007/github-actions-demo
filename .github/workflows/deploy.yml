@@ -1,5 +1,8 @@
 name: Deploy to EC2
 
+env:
+  APP_NAME: "DevOps Demo"
+
 on:
   push:
     branches:
@@ -31,5 +34,6 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            echo "Deploying $APP_NAME"
             sudo cp /tmp/index.html /var/www/html/index.html
             sudo systemctl restart nginx

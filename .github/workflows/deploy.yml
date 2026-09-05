@@ -196,3 +196,21 @@ jobs:
           script: |
             sudo cp /tmp/index.html /var/www/html/index.html
             sudo systemctl restart nginx
+
+
+  summary:
+    needs:
+      - build
+      - reusable-build
+      - deploy
+
+    if: always()
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Pipeline Summary
+        run: |
+          echo "Build result: ${{ needs.build.result }}"
+          echo "Reusable build result: ${{ needs.reusable-build.result }}"
+          echo "Deploy result: ${{ needs.deploy.result }}"

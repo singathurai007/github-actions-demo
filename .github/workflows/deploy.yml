@@ -88,6 +88,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
+      - name: Check GITHUB_TOKEN
+        run: |
+          if [ -n "$GITHUB_TOKEN" ]; then
+            echo "GITHUB_TOKEN is available"
+          else
+            echo "GITHUB_TOKEN is missing"
+            exit 1
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Download build artifacts
         uses: actions/download-artifact@v8
         with:

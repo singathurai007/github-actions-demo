@@ -25,8 +25,13 @@ jobs:
           APP_NAME: "Step Deployment"
         run: |
           echo "Shell: $APP_NAME"
-          echo "GitHub: ${{ env.APP_NAME }}" 
-      
+          echo "GitHub: ${{ env.APP_NAME }}"
+ 
+
+      - name: Debug GitHub context
+        run: echo '${{ toJSON(github) }}'
+
+
       - name: Checkout code
         uses: actions/checkout@v5
 

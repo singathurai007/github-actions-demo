@@ -80,10 +80,12 @@ jobs:
     needs:
       - build
       - reusable-build
-
     runs-on: ubuntu-latest
-
     environment: production
+
+    concurrency:
+      group: production-deployment
+      cancel-in-progress: false
 
     env:
       APP_NAME: "EC2 Deployment"

@@ -37,10 +37,10 @@ jobs:
     steps:
 
       - name: Checkout code
-        uses: actions/checkout@v5
-
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09  
+     
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: ${{ matrix.node-version }}
           cache: npm
@@ -64,7 +64,7 @@ jobs:
           echo "Build completed successfully" > build/result.txt
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: build-result-node-${{ matrix.node-version }}-${{ matrix.os }}
           path: build/
@@ -108,8 +108,8 @@ jobs:
         run: echo "Conclusion = ${{ steps.error-test.conclusion }}"
 
       - name: Checkout code
-        uses: actions/checkout@v5
-
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+     
       - name: Check GITHUB_TOKEN
         run: |
           if [ -n "$GITHUB_TOKEN" ]; then
@@ -132,7 +132,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           pattern: build-result-*
           path: downloaded-artifacts
@@ -179,7 +179,7 @@ jobs:
         run: echo "Branch name ends with main"
 
       - name: Copy website to EC2
-        uses: appleboy/scp-action@v1
+        uses: appleboy/scp-action@ff85246acaad7bdce478db94a363cd2bf7c90345
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
@@ -188,7 +188,7 @@ jobs:
           target: "/tmp/"
 
       - name: Deploy website
-        uses: appleboy/ssh-action@v1.2.5
+        uses: appleboy/ssh-action@0ff4204d59e8e51228ff73bce53f80d53301dee2
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}

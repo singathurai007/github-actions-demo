@@ -30,6 +30,12 @@ jobs:
           docker build \
             -t ghcr.io/${{ github.repository }}:latest .
 
+      - name: Debug
+        run: |
+          echo "Repository: ${{ github.repository }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Runner: ${{ runner.os }}"
+
       - name: Push Docker image
         run: |
           docker push ghcr.io/${{ github.repository }}:latest

@@ -94,6 +94,13 @@ jobs:
       APP_NAME: "EC2 Deployment"
 
     steps:
+
+      - name: Show OIDC Environment
+        run: |
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Environment: production"
+          echo "Ref: $GITHUB_REF"
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:

@@ -94,12 +94,14 @@ jobs:
       APP_NAME: "EC2 Deployment"
 
     steps:
-      - name: Check AWS Identity
-        run: aws sts get-caller-identity
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::399863053490:role/GitHubActionsOIDCRole
           aws-region: ap-south-1
 
+      - name: Check AWS Identity
+        run: aws sts get-caller-identity
 
       - name: Test continue-on-error
         id: error-test

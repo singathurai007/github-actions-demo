@@ -1,0 +1,17 @@
+name: Hello Custom Action
+
+description: My first custom GitHub Action
+
+inputs:
+  name:
+    description: Name to greet
+    required: true
+
+outputs:
+  message:
+    description: Greeting message
+    value: ${{ steps.greet.outputs.message }}
+
+runs:
+  using: node20
+  main: index.js

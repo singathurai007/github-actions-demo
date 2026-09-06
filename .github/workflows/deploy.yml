@@ -1,82 +1,3 @@
-name: Deploy to EC2
-
-permissions:
-  contents: read
-  id-token: write
-
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
-
-env:
-  APP_NAME: "DevOps Demo"
-
-jobs:
-
-  build:
-    strategy:
-      fail-fast: false
-      max-parallel: 2
-
-      matrix:
-        node-version: [18, 20, 22]
-        os: [ubuntu-latest, windows-latest]
-
-        exclude:
-          - node-version: 18
-            os: windows-latest
-
-        include:
-          - node-version: 22
-            os: ubuntu-latest
-            special: true
-
-    runs-on: ${{ matrix.os }}
-
-    steps:
-
-      - name: Checkout code
-        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09  
-     
-      - name: Setup Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: npm
-          cache-dependency-path: package-lock.json
-
-      - name: Show Node version
-        run: node --version
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run Lint
-        run: npx eslint app.js
-
-      - name: Run tests
-        run: npm test
-
-      - name: Create build artifact
-        run: |
-          mkdir -p build
-          echo "Build completed successfully" > build/result.txt
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
-        with:
-          name: build-result-node-${{ matrix.node-version }}-${{ matrix.os }}
-          path: build/
-
-
-  reusable-build:
-    uses: ./.github/workflows/reusable-build.yml
-    with:
-      node-version: "20"
-
-
   deploy:
     needs:
       - build
@@ -94,12 +15,6 @@ jobs:
       APP_NAME: "EC2 Deployment"
 
     steps:
-
-      - name: Show OIDC Environment
-        run: |
-          echo "Repository: $GITHUB_REPOSITORY"
-          echo "Environment: production"
-          echo "Ref: $GITHUB_REF"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -123,32 +38,8 @@ jobs:
       - name: Check step conclusion
         run: echo "Conclusion = ${{ steps.error-test.conclusion }}"
 
-      - name: Checkout code
-        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
-     
-      - name: Check GITHUB_TOKEN
-        run: |
-          if [ -n "$GITHUB_TOKEN" ]; then
-            echo "GITHUB_TOKEN is available"
-          else
-            echo "GITHUB_TOKEN is missing"
-            exit 1
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Test write permission
-        run: |
-          curl -L \
-            -X POST \
-            -H "Authorization: Bearer $GITHUB_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${{ github.repository }}/issues"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Download build artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        uses: actions/download-artifact@v8
         with:
           pattern: build-result-*
           path: downloaded-artifacts
@@ -157,44 +48,12 @@ jobs:
       - name: Show downloaded artifacts
         run: ls -R downloaded-artifacts
 
-      - name: Test environment variable
-        env:
-          APP_NAME: "Step Deployment"
-        run: |
-          echo "Shell: $APP_NAME"
-          echo "GitHub: ${{ env.APP_NAME }}"
-
-      - name: Debug GitHub context
-        run: echo '${{ toJSON(github) }}'
-
-      - name: Show matrix build completed
-        run: echo "All matrix build jobs completed successfully!"
-
       - name: Run Node Test Composite Action
         uses: ./.github/actions/node-test
         with:
           node-version: "20"
 
-      - name: Run Lint
-        run: npx eslint app.js
-
-      - name: Always run
-        if: always()
-        run: echo "This step always runs!"
-
-      - name: Check main branch
-        if: contains(github.ref, 'main')
-        run: echo "This is the main branch"
-
-      - name: Check branch format
-        if: startsWith(github.ref, 'refs/heads/')
-        run: echo "This is a branch"
-
-      - name: Check main branch ending
-        if: endsWith(github.ref, 'main')
-        run: echo "Branch name ends with main"
-
-      - name: Copy website to EC2
+      - name: Deploy to EC2
         uses: appleboy/scp-action@ff85246acaad7bdce478db94a363cd2bf7c90345
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -203,7 +62,7 @@ jobs:
           source: "index.html"
           target: "/tmp/"
 
-      - name: Deploy website
+      - name: Restart Nginx
         uses: appleboy/ssh-action@0ff4204d59e8e51228ff73bce53f80d53301dee2
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -212,21 +71,3 @@ jobs:
           script: |
             sudo cp /tmp/index.html /var/www/html/index.html
             sudo systemctl restart nginx
-
-
-  summary:
-    needs:
-      - build
-      - reusable-build
-      - deploy
-
-    if: always()
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Pipeline Summary
-        run: |
-          echo "Build result: ${{ needs.build.result }}"
-          echo "Reusable build result: ${{ needs.reusable-build.result }}"
-          echo "Deploy result: ${{ needs.deploy.result }}"

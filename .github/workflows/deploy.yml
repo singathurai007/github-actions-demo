@@ -2,6 +2,7 @@ name: Deploy to EC2
 
 permissions:
   contents: read
+  id-token: write
 
 on:
   push:
@@ -93,6 +94,12 @@ jobs:
       APP_NAME: "EC2 Deployment"
 
     steps:
+      - name: Check AWS Identity
+        run: aws sts get-caller-identity
+        with:
+          role-to-assume: arn:aws:iam::399863053490:role/GitHubActionsOIDCRole
+          aws-region: ap-south-1
+
 
       - name: Test continue-on-error
         id: error-test

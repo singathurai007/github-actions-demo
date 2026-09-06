@@ -1,0 +1,7 @@
+name: My Docker Custom Action
+
+description: A simple Docker based custom GitHub Action
+
+runs:
+  using: docker
+  image: Dockerfile

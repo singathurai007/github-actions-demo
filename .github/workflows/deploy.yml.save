@@ -1,0 +1,103 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+env:
+  APP_NAME: "DevOps Demo"
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest 
+
+strategy:
+  matrix:
+    node-version: [18, 20, 22]
+    os: [ubuntu-latest, windows-latest]
+
+runs-on: ${{ matrix.os }}
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Show Node version
+        run: node --version
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    env:
+      APP_NAME: "EC2 Deployment"
+
+    steps:
+
+      - name: Test environment variable
+        env:
+          APP_NAME: "Step Deployment"
+        run: |
+          echo "Shell: $APP_NAME"
+          echo "GitHub: ${{ env.APP_NAME }}"
+
+      - name: Debug GitHub context
+        run: echo '${{ toJSON(github) }}'
+
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Lint
+        run: npx eslint app.js
+
+      - name: Run tests
+        if: success()
+        run: npm test
+
+      - name: Always run
+        if: always()
+        run: echo "This step always runs!"
+
+      - name: Check main branch
+        if: contains(github.ref, 'main')
+        run: echo "This is the main branch"
+
+      - name: Check branch format
+        if: startsWith(github.ref, 'refs/heads/')
+        run: echo "This is a branch"
+
+      - name: Check main branch ending
+        if: endsWith(github.ref, 'main')
+        run: echo "Branch name ends with main"
+
+      - name: Copy website to EC2
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "index.html"
+          target: "/tmp/"
+
+      - name: Deploy website
+        uses: appleboy/ssh-action@v1.2.5
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo cp /tmp/index.html /var/www/html/index.html
+            sudo systemctl restart nginx

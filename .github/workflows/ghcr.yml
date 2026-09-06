@@ -1,4 +1,4 @@
-name: Hardened CI/CD Pipeline
+name: Docker Image to GHCR
 
 on:
   push:
@@ -10,18 +10,19 @@ permissions:
   contents: read
   packages: write
 
-concurrency:
-  group: production-deployment
-  cancel-in-progress: false
-
 jobs:
-  build:
+  docker:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Show Repository IDs
+        run: |
+          echo "Repository: ${{ github.repository }}"
+          echo "Owner ID: ${{ github.repository_owner_id }}"
+          echo "Repository ID: ${{ github.repository_id }}"
 
       - name: Login to GHCR
         uses: docker/login-action@v3
@@ -35,23 +36,10 @@ jobs:
           docker build \
             -t ghcr.io/${{ github.repository }}:latest .
 
-      - name: Security Debug
-        run: |
-          echo "Repository: ${{ github.repository }}"
-          echo "Branch: ${{ github.ref_name }}"
-          echo "Runner: ${{ runner.os }}"
-
       - name: Push Docker image
         run: |
           docker push ghcr.io/${{ github.repository }}:latest
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment: production
-    timeout-minutes: 10
-
-    steps:
       - name: Deploy Docker container to EC2
         uses: appleboy/ssh-action@0ff4204d59e8e51228ff73bce53f80d53301dee2
         with:
@@ -60,13 +48,10 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             docker pull ghcr.io/${{ github.repository }}:latest
-
             docker stop github-actions-demo || true
             docker rm github-actions-demo || true
-
             docker run -d \
               --name github-actions-demo \
               -p 8080:80 \
               ghcr.io/${{ github.repository }}:latest
-
             docker ps

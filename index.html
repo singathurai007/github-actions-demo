@@ -1,11 +1,118 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>DevOps CI/CD Demo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DreamStay Hotel</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Hello from GitHub Actions 🚀</h1>
-    <h2>CI/CD Deployment Successful</h2>
-    <p>Deployed i am the winner Arunnnnnn  of all time  automatically to AWS EC2.</p>
+
+    <!-- Navbar -->
+    <header>
+        <nav>
+            <h2>🏨 DreamStay</h2>
+
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#rooms">Rooms</a></li>
+                <li><a href="#booking">Booking</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero -->
+    <section id="home" class="hero">
+        <div>
+            <h1>Welcome to DreamStay Hotel</h1>
+            <p>Comfortable rooms. Great service. Perfect stay.</p>
+            <a href="#booking" class="btn">Book Now</a>
+        </div>
+    </section>
+
+    <!-- Rooms -->
+    <section id="rooms">
+        <h2 class="section-title">Our Rooms</h2>
+
+        <div class="rooms">
+
+            <div class="room-card">
+                <div class="room-image">🛏️</div>
+                <h3>Single Room</h3>
+                <p>Perfect for one person.</p>
+                <h4>₹1500 / Night</h4>
+                <button onclick="selectRoom('Single Room', 1500)">
+                    Book Room
+                </button>
+            </div>
+
+            <div class="room-card">
+                <div class="room-image">🛏️🛏️</div>
+                <h3>Double Room</h3>
+                <p>Comfortable room for two people.</p>
+                <h4>₹2500 / Night</h4>
+                <button onclick="selectRoom('Double Room', 2500)">
+                    Book Room
+                </button>
+            </div>
+
+            <div class="room-card">
+                <div class="room-image">🏨</div>
+                <h3>Luxury Room</h3>
+                <p>Premium room with luxury facilities.</p>
+                <h4>₹4000 / Night</h4>
+                <button onclick="selectRoom('Luxury Room', 4000)">
+                    Book Room
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Booking Form -->
+    <section id="booking" class="booking-section">
+
+        <h2 class="section-title">Book Your Room</h2>
+
+        <form id="bookingForm">
+
+            <label>Full Name</label>
+            <input type="text" id="name" placeholder="Enter your name" required>
+
+            <label>Email</label>
+            <input type="email" id="email" placeholder="Enter your email" required>
+
+            <label>Room</label>
+            <select id="room" required>
+                <option value="">Select Room</option>
+                <option value="Single Room">Single Room</option>
+                <option value="Double Room">Double Room</option>
+                <option value="Luxury Room">Luxury Room</option>
+            </select>
+
+            <label>Check-in Date</label>
+            <input type="date" id="checkin" required>
+
+            <label>Check-out Date</label>
+            <input type="date" id="checkout" required>
+
+            <label>Number of Guests</label>
+            <input type="number" id="guests" min="1" max="10" value="1" required>
+
+            <button type="submit" class="submit-btn">
+                Confirm Booking
+            </button>
+
+        </form>
+
+        <div id="result"></div>
+
+    </section>
+
+    <footer>
+        <p>© 2026 DreamStay Hotel | All Rights Reserved</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>

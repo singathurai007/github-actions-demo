@@ -3,116 +3,681 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>DreamStay Hotel</title>
-    <link rel="stylesheet" href="style.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        /* NAVBAR */
+
+        header {
+            background: #222;
+            color: white;
+            padding: 15px 8%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h2 {
+            color: white;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            color: #ff9800;
+        }
+
+        /* HERO */
+
+        .hero {
+            height: 400px;
+
+            background:
+                linear-gradient(
+                    rgba(0,0,0,0.5),
+                    rgba(0,0,0,0.5)
+                ),
+                url("https://images.unsplash.com/photo-1566073771259-6a8506099945")
+                center/cover;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 25px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #ff9800;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background: #e68900;
+        }
+
+        /* SECTION */
+
+        .section-title {
+            text-align: center;
+            margin: 40px 0 25px;
+            font-size: 30px;
+        }
+
+        /* ROOMS */
+
+        .rooms {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            padding: 20px 8%;
+            flex-wrap: wrap;
+        }
+
+        .room-card {
+            background: white;
+            width: 300px;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+
+            box-shadow:
+                0 3px 10px rgba(0,0,0,0.15);
+        }
+
+        .room-image {
+            height: 150px;
+            background: #e8e8e8;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 60px;
+            border-radius: 8px;
+
+            margin-bottom: 15px;
+        }
+
+        .room-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .room-card h4 {
+            margin: 15px 0;
+            color: #e67e00;
+        }
+
+        .room-card button {
+            background: #222;
+            color: white;
+
+            border: none;
+
+            padding: 10px 20px;
+
+            border-radius: 5px;
+
+            cursor: pointer;
+        }
+
+        .room-card button:hover {
+            background: #ff9800;
+        }
+
+        /* BOOKING */
+
+        .booking-section {
+            max-width: 600px;
+            margin: 40px auto;
+
+            padding: 30px;
+
+            background: white;
+
+            border-radius: 10px;
+
+            box-shadow:
+                0 3px 10px rgba(0,0,0,0.15);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 12px;
+            margin-bottom: 5px;
+
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            padding: 12px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 5px;
+
+            font-size: 15px;
+        }
+
+        .submit-btn {
+            margin-top: 20px;
+
+            padding: 12px;
+
+            background: #ff9800;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 5px;
+
+            cursor: pointer;
+
+            font-size: 16px;
+        }
+
+        .submit-btn:hover {
+            background: #e68900;
+        }
+
+        /* BOOKING RESULT */
+
+        #result {
+            margin-top: 20px;
+
+            padding: 15px;
+
+            background: #e8f5e9;
+
+            border-radius: 5px;
+
+            display: none;
+        }
+
+        /* FOOTER */
+
+        footer {
+            margin-top: 40px;
+
+            padding: 20px;
+
+            text-align: center;
+
+            background: #222;
+
+            color: white;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 600px) {
+
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav ul {
+                gap: 15px;
+            }
+
+            .hero h1 {
+                font-size: 30px;
+            }
+
+            .rooms {
+                padding: 10px;
+            }
+
+            .booking-section {
+                margin: 20px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-    <!-- Navbar -->
+    <!-- NAVBAR -->
+
     <header>
         <nav>
+
             <h2>🏨 DreamStay</h2>
 
             <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#rooms">Rooms</a></li>
-                <li><a href="#booking">Booking</a></li>
+                <li>
+                    <a href="#home">Home</a>
+                </li>
+
+                <li>
+                    <a href="#rooms">Rooms</a>
+                </li>
+
+                <li>
+                    <a href="#booking">Booking</a>
+                </li>
             </ul>
+
         </nav>
     </header>
 
-    <!-- Hero -->
+
+    <!-- HERO SECTION -->
+
     <section id="home" class="hero">
+
         <div>
-            <h1>Welcome to DreamStay Hotel</h1>
-            <p>Comfortable rooms. Great service. Perfect stay.</p>
-            <a href="#booking" class="btn">Book Now</a>
+
+            <h1>
+                Welcome to DreamStay Hotel
+            </h1>
+
+            <p>
+                Comfortable rooms. Great service. Perfect stay.
+            </p>
+
+            <a href="#booking" class="btn">
+                Book Now
+            </a>
+
         </div>
+
     </section>
 
-    <!-- Rooms -->
+
+    <!-- ROOMS SECTION -->
+
     <section id="rooms">
-        <h2 class="section-title">Our Rooms</h2>
+
+        <h2 class="section-title">
+            Our Rooms
+        </h2>
+
 
         <div class="rooms">
 
-            <div class="room-card">
-                <div class="room-image">🛏️</div>
-                <h3>Single Room</h3>
-                <p>Perfect for one person.</p>
-                <h4>₹1500 / Night</h4>
-                <button onclick="selectRoom('Single Room', 1500)">
-                    Book Room
-                </button>
-            </div>
+
+            <!-- SINGLE ROOM -->
 
             <div class="room-card">
-                <div class="room-image">🛏️🛏️</div>
-                <h3>Double Room</h3>
-                <p>Comfortable room for two people.</p>
-                <h4>₹2500 / Night</h4>
-                <button onclick="selectRoom('Double Room', 2500)">
+
+                <div class="room-image">
+                    🛏️
+                </div>
+
+                <h3>
+                    Single Room
+                </h3>
+
+                <p>
+                    Perfect for one person.
+                </p>
+
+                <h4>
+                    ₹1500 / Night
+                </h4>
+
+                <button onclick="selectRoom('Single Room')">
                     Book Room
                 </button>
+
             </div>
 
+
+            <!-- DOUBLE ROOM -->
+
             <div class="room-card">
-                <div class="room-image">🏨</div>
-                <h3>Luxury Room</h3>
-                <p>Premium room with luxury facilities.</p>
-                <h4>₹4000 / Night</h4>
-                <button onclick="selectRoom('Luxury Room', 4000)">
+
+                <div class="room-image">
+                    🛏️🛏️
+                </div>
+
+                <h3>
+                    Double Room
+                </h3>
+
+                <p>
+                    Comfortable room for two people.
+                </p>
+
+                <h4>
+                    ₹2500 / Night
+                </h4>
+
+                <button onclick="selectRoom('Double Room')">
                     Book Room
                 </button>
+
             </div>
+
+
+            <!-- LUXURY ROOM -->
+
+            <div class="room-card">
+
+                <div class="room-image">
+                    🏨
+                </div>
+
+                <h3>
+                    Luxury Room
+                </h3>
+
+                <p>
+                    Premium room with luxury facilities.
+                </p>
+
+                <h4>
+                    ₹4000 / Night
+                </h4>
+
+                <button onclick="selectRoom('Luxury Room')">
+                    Book Room
+                </button>
+
+            </div>
+
 
         </div>
+
     </section>
 
-    <!-- Booking Form -->
+
+    <!-- BOOKING SECTION -->
+
     <section id="booking" class="booking-section">
 
-        <h2 class="section-title">Book Your Room</h2>
+        <h2 class="section-title">
+            Book Your Room
+        </h2>
+
 
         <form id="bookingForm">
 
-            <label>Full Name</label>
-            <input type="text" id="name" placeholder="Enter your name" required>
 
-            <label>Email</label>
-            <input type="email" id="email" placeholder="Enter your email" required>
+            <label>
+                Full Name
+            </label>
 
-            <label>Room</label>
+            <input
+                type="text"
+                id="name"
+                placeholder="Enter your name"
+                required
+            >
+
+
+            <label>
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter your email"
+                required
+            >
+
+
+            <label>
+                Room
+            </label>
+
             <select id="room" required>
-                <option value="">Select Room</option>
-                <option value="Single Room">Single Room</option>
-                <option value="Double Room">Double Room</option>
-                <option value="Luxury Room">Luxury Room</option>
+
+                <option value="">
+                    Select Room
+                </option>
+
+                <option value="Single Room">
+                    Single Room
+                </option>
+
+                <option value="Double Room">
+                    Double Room
+                </option>
+
+                <option value="Luxury Room">
+                    Luxury Room
+                </option>
+
             </select>
 
-            <label>Check-in Date</label>
-            <input type="date" id="checkin" required>
 
-            <label>Check-out Date</label>
-            <input type="date" id="checkout" required>
+            <label>
+                Check-in Date
+            </label>
 
-            <label>Number of Guests</label>
-            <input type="number" id="guests" min="1" max="10" value="1" required>
+            <input
+                type="date"
+                id="checkin"
+                required
+            >
 
-            <button type="submit" class="submit-btn">
+
+            <label>
+                Check-out Date
+            </label>
+
+            <input
+                type="date"
+                id="checkout"
+                required
+            >
+
+
+            <label>
+                Number of Guests
+            </label>
+
+            <input
+                type="number"
+                id="guests"
+                min="1"
+                max="10"
+                value="1"
+                required
+            >
+
+
+            <button
+                type="submit"
+                class="submit-btn"
+            >
                 Confirm Booking
             </button>
 
         </form>
 
+
+        <!-- RESULT -->
+
         <div id="result"></div>
 
     </section>
 
+
+    <!-- FOOTER -->
+
     <footer>
-        <p>© 2026 DreamStay Hotel | All Rights Reserved</p>
+
+        <p>
+            © 2026 DreamStay Hotel | All Rights Reserved
+        </p>
+
     </footer>
 
-    <script src="script.js"></script>
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        // Select room from room card
+
+        function selectRoom(roomName) {
+
+            document.getElementById("room").value = roomName;
+
+            document.getElementById("booking")
+                .scrollIntoView({
+                    behavior: "smooth"
+                });
+        }
+
+
+        // Booking form
+
+        document
+            .getElementById("bookingForm")
+            .addEventListener("submit", function(event) {
+
+                event.preventDefault();
+
+
+                // Get values
+
+                let name =
+                    document.getElementById("name").value;
+
+                let email =
+                    document.getElementById("email").value;
+
+                let room =
+                    document.getElementById("room").value;
+
+                let checkin =
+                    document.getElementById("checkin").value;
+
+                let checkout =
+                    document.getElementById("checkout").value;
+
+                let guests =
+                    document.getElementById("guests").value;
+
+
+                // Date validation
+
+                if (checkout <= checkin) {
+
+                    alert(
+                        "Check-out date must be after check-in date."
+                    );
+
+                    return;
+                }
+
+
+                // Show result
+
+                let result =
+                    document.getElementById("result");
+
+                result.style.display = "block";
+
+
+                result.innerHTML = `
+
+                    <h3>
+                        ✅ Booking Confirmed!
+                    </h3>
+
+                    <br>
+
+                    <p>
+                        <strong>Name:</strong>
+                        ${name}
+                    </p>
+
+                    <p>
+                        <strong>Email:</strong>
+                        ${email}
+                    </p>
+
+                    <p>
+                        <strong>Room:</strong>
+                        ${room}
+                    </p>
+
+                    <p>
+                        <strong>Check-in:</strong>
+                        ${checkin}
+                    </p>
+
+                    <p>
+                        <strong>Check-out:</strong>
+                        ${checkout}
+                    </p>
+
+                    <p>
+                        <strong>Guests:</strong>
+                        ${guests}
+                    </p>
+
+                    <br>
+
+                    <p>
+                        Thank you for booking with DreamStay Hotel!
+                    </p>
+
+                `;
+
+
+                // Clear form
+
+                document
+                    .getElementById("bookingForm")
+                    .reset();
+
+            });
+
+    </script>
+
 </body>
 </html>
